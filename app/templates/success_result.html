@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Результаты получены</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://threejs.org/build/three.js"></script>
+    <style>
+        body {
+            height: 100%;
+            margin: 0;
+            background-color: #000;
+            transition: background-color .5s;
+        }
+        svg {
+            width: 100%;
+            height: 100vh;
+            vertical-align: top;
+            fill: blue;
+            /* stroke white */
+            stroke-width: 5;
+            stroke-dasharray: 20;
+            transition: fill .5s;
+        }
+        path {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="results_holder">
+        <div class="results_shield">
+            <p class="result_title">Посмотреть результаты</p>
+        </div>
+    </div>
+</body>
+<script>
+function create(type){
+  return document.createElementNS("http://www.w3.org/2000/svg", type)
+}
+let w // wiewport width
+let h // wiewport height
+let diag // diagonal
+let time = 0 // time from script beginning
+const init = Date.now()
+const svg = create("svg")
+let count = 5
+document.body.appendChild(svg)
+function createCircle(cx,cy,r){
+  return ` M ${cx} ${cy}
+    m ${-r}, 0
+    a ${r},${r} 0 1,1 ${r * 2},0
+    a ${r},${r} 0 1,1 ${-r * 2},0 `
+}
+
+const path = create('path')
+path.setAttribute('fill-rule', 'evenodd')
+
+svg.appendChild(path)
+const radius = 100
+const min = .2
+function draw() {
+  const circles = []
+  for(let i = 0; i < count; i++) {
+    const ii = i / count + time / count * 2/3
+    const ang = ii * Math.PI * 2
+    const cos = Math.cos(ang) * 2
+    const sin = Math.sin(ang) * 2
+    const c = 1/Math.tan(ang / 2)
+    const x = cos * radius
+    const y = sin * radius
+    circles.push([w/2 + x, h / 2 + y + 30 * c, 30 * c])
+  }
+  if(Math.floor(time * 2/3) % 2)
+   circles.push([w/2, h / 2, diag / 2])
+  
+  path.setAttribute("d", circles.map(c => createCircle(...c)).join(' '))
+  const r = -time * 70
+  path.setAttribute('transform', `rotate(${r}, ${w/2}, ${h/2})`)
+}
+
+function loop() {
+  time = (Date.now() - init) / 1000
+  draw()
+  window.requestAnimationFrame(loop)
+}
+
+function resize() {
+  w = window.innerWidth
+  h = window.innerHeight
+  diag = Math.hypot(w, h)
+  draw()
+}
+
+window.addEventListener('wheel', e => {
+  e.preventDefault()
+  count = Math.max(1, count + Math.sign(e.deltaY))
+  draw()
+})
+path.addEventListener('click', (e) => {
+  e.stopPropagation()
+  svg.style.fill = `hsl(${Math.random()*360},100%,${Math.random()*20+30}%)`
+})
+path.dispatchEvent(new Event('click'))
+document.body.addEventListener('click', (e) => {
+  e.stopPropagation()
+  document.body.style.backgroundColor = `hsl(${Math.random()*360},100%,${Math.random()*20}%)`
+})
+window.addEventListener('resize', resize)
+resize()
+loop()
+</script>
+</html>

@@ -4,19 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Вход</title>
+    <title>Регистрация</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <div class="container">
-        <h2>Вход</h2>
+        <h2>Регистрация</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Войти</button>
+            <button type="submit">Зарегистрироваться</button>
         </form>
-        <a href="{% url 'register' %}">Нет аккаунта? Зарегистрироваться</a>
+        <a href="{% url 'login' %}">Уже зарегистрированы? Войти</a>
     </div>
 </body>
 </html>

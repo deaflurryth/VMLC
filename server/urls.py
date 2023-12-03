@@ -19,15 +19,13 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from app import views
-from django.contrib.auth.views import LoginView, LogoutView, LoginView
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.index, name='VMLC'),
     path('success_result/', views.success_result, name='success'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('registration/', views.register, name='registration'),
+    path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
 ]
 

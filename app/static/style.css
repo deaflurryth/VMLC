@@ -157,4 +157,6 @@ header {
     color: white;
     font-family: 'Russo One', sans-serif;
     font-size: 22px;
+    -webkit-background-clip: text;
+    background-clip: text;
 }

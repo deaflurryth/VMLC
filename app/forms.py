@@ -5,7 +5,13 @@ from django.contrib.auth.models import User
 class UploadCsvForm(forms.Form):
     MODEL_CHOICES = [
         ('linear_regression', 'Линейная Регрессия'),
-        ('decision_tree', 'Решающее Дерево')
+        ('decision_tree', 'Решающее Дерево'),
+        ('logistic_regression', 'Логистическая Регрессия'),
+        ('svm', 'Метод Опорных Векторов'),
+        ('knn', 'K-Ближайших Соседей'),
+        ('kmeans', 'Методы Кластеризации'),
+        ('gradient_boosting', 'Градиентный Бустинг'),
+        ('neural_network', 'Нейронные Сети'),
     ]
 
     csv_file = forms.FileField(label='Загрузите данные .csv')

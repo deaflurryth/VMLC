@@ -7,7 +7,7 @@ class UploadedDataAdmin(admin.ModelAdmin):
     fields = ('user', 'csv_file', 'model_type', 'upload_date',
               'MSE','MAE','RSQUARE','ACCURACY',
               'RECALL','PRECISION','F1','ROC',
-              'SILHUETTE','DAVIES','INTERIA', 'target_variable') 
-    readonly_fields = ('upload_date',)
+              'SILHUETTE','DAVIES','INTERIA', 'target_variable', 'graph_file') 
+    readonly_fields = ('upload_date', 'graph_file', 'csv_file')
 
 admin.site.register(UploadedData, UploadedDataAdmin)

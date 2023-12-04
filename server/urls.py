@@ -27,6 +27,8 @@ urlpatterns = [
     path('success_result/', views.success_result, name='success'),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
+    path('result/', views.resulations_models, name='result'),
+    path('download_current_results/', views.download_current_results, name='download_current_results'),
 ]
 
 

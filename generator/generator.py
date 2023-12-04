@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.datasets import make_classification, make_regression
-from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_classification, make_regression, make_blobs
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def linear_regression_generator(id):
     np.random.seed(0)
@@ -85,3 +85,61 @@ def decision_tree_random_forest_generator_modern(id, n_features=5):
 
     return csv_file
 #decision_tree_random_forest_generator(3)
+
+def logistic_regression_dataset_generator(id):
+    np.random.seed(0)
+    X, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, random_state=0, n_clusters_per_class=1)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    df = pd.DataFrame({'Feature1': X[:, 0], 'Feature2': X[:, 1], 'Target': y})
+
+    csv_file = f'generator/generated/logistic_regression_data{id}.csv'
+    df.to_csv(csv_file, index=False)
+
+    return csv_file
+logistic_regression_dataset_generator(1)
+def kmeans_dataset_generator(id):
+    np.random.seed(0)
+    X, _ = make_blobs(n_samples=100, n_features=2, centers=3, random_state=0)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    df = pd.DataFrame({'Feature1': X[:, 0], 'Feature2': X[:, 1]})
+
+    csv_file = f'generator/generated/cluster_data{id}.csv'
+    df.to_csv(csv_file, index=False)
+
+    return csv_file
+kmeans_dataset_generator(1)
+def gradient_boosting_dataset_generator(id):
+    np.random.seed(0)
+    X, y = make_regression(n_samples=100, n_features=2, n_informative=2, random_state=0, noise=10.0)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    df = pd.DataFrame({'Feature1': X[:, 0], 'Feature2': X[:, 1], 'Target': y})
+
+    csv_file = f'generator/generated/gradient_boosting_data{id}.csv'
+    df.to_csv(csv_file, index=False)
+
+    return csv_file
+gradient_boosting_dataset_generator(1)
+
+def neural_network_dataset_generator(id):
+    np.random.seed(0)
+    X, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0, n_clusters_per_class=1, random_state=0)
+
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(X)
+
+    df = pd.DataFrame({'Feature1': X[:, 0], 'Feature2': X[:, 1], 'Target': y})
+
+    csv_file = f'generator/generated/neural_network_data{id}.csv'
+    df.to_csv(csv_file, index=False)
+
+    return csv_file
+neural_network_dataset_generator(1)

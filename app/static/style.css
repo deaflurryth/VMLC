@@ -154,7 +154,7 @@ header {
     border-radius: 30px;
 }
 .result_title {
-    color: white;
+    color: black;
     font-family: 'Russo One', sans-serif;
     font-size: 22px;
     -webkit-background-clip: text;

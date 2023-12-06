@@ -118,8 +118,16 @@ def handle_decision_tree(X, y, instance):
     instance.save()
 def handle_logistic_regression(X, y, instance):
     model = LogisticRegression()
-    threshold = 0.5
+    threshold = np.median(y)
     y_class = (y > threshold).astype(int)
+    if len(np.unique(y_class)) < 2:
+        # Если только один класс, пробуем другое пороговое значение
+        # Например, медиану
+        threshold = np.median(y)
+        y_class = (y > threshold).astype(int)
+        if len(np.unique(y_class)) < 2:
+            print("Невозможно применить логистическую регрессию: данные содержат только один класс")
+            return
     model.fit(X, y_class)
     predictions = model.predict(X)
     instance.ACCURACY = accuracy_score(y_class, predictions)
@@ -146,7 +154,7 @@ def handle_logistic_regression(X, y, instance):
     instance.save()
 def handle_svm(X, y, instance):
     model = SVC()
-    threshold = 0.5
+    threshold = np.median(y)
     y_class = (y > threshold).astype(int)
     model.fit(X, y_class)
     predictions = model.predict(X)

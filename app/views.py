@@ -39,30 +39,30 @@ def preprocess_data(X, y, model_choice):
     X.fillna(X.mean(), inplace=True)
     y.fillna(y.mean(), inplace=True)
 
-    # Обработка выбросов (здесь - пример с Z-score)
+    # обработка выбросов (здесь - пример с Z-score)
     # from scipy import stats
     # X = X[(np.abs(stats.zscore(X)) < 3).all(axis=1)]
 
-    # Преобразование признаков
+    # преобразование признаков
     # X = np.log1p(X)
 
     if model_choice in ['linear_regression', 'logistic_regression', 'svm', 'gradient_boosting']:
-        # Кодирование категориальных переменных и стандартизация
+        # категориальные переменные и стандартизация
         X = pd.get_dummies(X)
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
 
     elif model_choice in ['decision_tree', 'knn', 'kmeans']:
-        # Кодирование категориальных переменных (если есть)
+        # категориальные переменные (если есть)
         X = pd.get_dummies(X)
 
     if model_choice in ['knn', 'kmeans', 'neural_network']:
-        #Отбор признаков (например, с использованием SelectKBest)
+        # отбор признаков 
         selector = SelectKBest(f_classif, k=10)
         X = selector.fit_transform(X, y)
 
     if model_choice in ['svm', 'neural_network']:
-        # Балансировка классов
+        # балансировка классов
         smote = SMOTE()
         X, y = smote.fit_resample(X, y)
 
@@ -74,7 +74,7 @@ def handle_linear_regression(X, y, instance):
     instance.MSE = mean_squared_error(y, predictions)
     instance.MAE = mean_absolute_error(y, predictions)
     instance.RSQUARE = r2_score(y, predictions)
-    # Генерация графика
+    # генерация графика
     predictions = model.predict(X)
     plt.figure(figsize=(10, 6))
     plt.scatter(X, y, color='blue')
@@ -83,12 +83,12 @@ def handle_linear_regression(X, y, instance):
     plt.xlabel('Independent Variable')
     plt.ylabel('Dependent Variable')
 
-    # Сохранение графика в файл
+    # сохранение графика в файл
     graph_filename = f'linear_regression_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели с путем к файлу графика
+    # обновление экземпляра модели с путем к файлу графика
     instance.graph_file.name = os.path.join('graphs', graph_filename)
     instance.save()
 def handle_decision_tree(X, y, instance):
@@ -110,12 +110,10 @@ def handle_decision_tree(X, y, instance):
     plt.ylabel('Importance')
     plt.title('Feature Importance for Decision Tree')
 
-    # Сохранение графика
     graph_filename = f'decision_tree_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
     instance.graph_file.name = graph_path
     instance.save()
 def handle_logistic_regression(X, y, instance):
@@ -139,12 +137,11 @@ def handle_logistic_regression(X, y, instance):
     plt.ylabel('Feature 2')
     plt.title('Logistic Regression Result')
 
-    # Сохранение графика
     graph_filename = f'logistic_regression_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
+
     instance.graph_file.name = graph_path
     instance.save()
 def handle_svm(X, y, instance):
@@ -157,7 +154,7 @@ def handle_svm(X, y, instance):
     instance.RECALL = recall_score(y, predictions)
     instance.PRECISION = precision_score(y, predictions)
     instance.F1 = f1_score(y, predictions)
-    # Визуализация
+
     X_np = X.to_numpy() if isinstance(X, pd.DataFrame) else X 
     plt.figure(figsize=(10, 6))
     plt.scatter(X_np[:, 0], X_np[:, 1], c=y)
@@ -165,12 +162,11 @@ def handle_svm(X, y, instance):
     plt.ylabel('Feature 2')
     plt.title('SVM')
 
-    # Сохранение графика
     graph_filename = f'svm_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
+
     instance.graph_file.name = graph_path
 def handle_knn(X, y, instance):
     model = KNeighborsClassifier()
@@ -180,7 +176,7 @@ def handle_knn(X, y, instance):
     instance.RECALL = recall_score(y, predictions)
     instance.PRECISION = precision_score(y, predictions)
     instance.F1 = f1_score(y, predictions)
-    # Визуализация
+
     X_np = X.to_numpy() if isinstance(X, pd.DataFrame) else X 
     plt.figure(figsize=(10, 6))
     plt.scatter(X_np[:, 0], X_np[:, 1], c=y)
@@ -188,12 +184,12 @@ def handle_knn(X, y, instance):
     plt.ylabel('Feature 2')
     plt.title('KNN Classification')
 
-    # Сохранение графика
+
     graph_filename = f'knn_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
+
     instance.graph_file.name = graph_path
 def handle_kmeans(X, y, instance):
     model = KMeans(n_clusters=3)
@@ -206,14 +202,12 @@ def handle_kmeans(X, y, instance):
 
     plt.figure(figsize=(10, 6))
 
-    # Проверка, является ли X одномерным
+
     if X_np.shape[1] == 1:
-        # Для одномерных данных создаем произвольные y-значения
         y_values = np.zeros(X_np.shape[0])
         plt.scatter(X_np[:, 0], y_values, c=labels)
         plt.scatter(model.cluster_centers_[:, 0], np.zeros(model.cluster_centers_.shape[0]), c='red', marker='x')
     else:
-        # Для многомерных данных используем первые два признака
         plt.scatter(X_np[:, 0], X_np[:, 1], c=labels)
         plt.scatter(model.cluster_centers_[:, 0], model.cluster_centers_[:, 1], c='red', marker='x')
 
@@ -221,12 +215,10 @@ def handle_kmeans(X, y, instance):
     plt.ylabel('Feature 2' if X_np.shape[1] > 1 else 'Arbitrary Value')
     plt.title('K-Means Clustering')
 
-    # Сохранение графика
     graph_filename = f'kmeans_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
     instance.graph_file.name = graph_path
     instance.save()
 def handle_gradient(X, y, instance):
@@ -247,16 +239,15 @@ def handle_gradient(X, y, instance):
     plt.ylabel('Feature 2')
     plt.title('Gradient boosting')
 
-    # Сохранение графика
+
     graph_filename = f'gradient_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
+
     instance.graph_file.name = graph_path
     instance.save()
 def handle_neural(X, y, instance):
-    # Определение и обучение нейронной сети
     class SimpleNN(nn.Module):
         def __init__(self, input_size):
             super(SimpleNN, self).__init__()
@@ -270,7 +261,6 @@ def handle_neural(X, y, instance):
             x = torch.sigmoid(self.fc3(x))
             return x
 
-    # Подготовка данных
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
@@ -279,14 +269,11 @@ def handle_neural(X, y, instance):
     X_test = torch.tensor(X_test, dtype=torch.float32)
     y_test = torch.tensor(y_test.values, dtype=torch.float32)
 
-    # Инициализация модели
     model = SimpleNN(X_train.shape[1])
 
-    # Функция потерь и оптимизатор
     criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    # Обучение
     num_epochs = 100
     loss_list = []
     for epoch in range(num_epochs):
@@ -299,7 +286,6 @@ def handle_neural(X, y, instance):
         if (epoch+1) % 10 == 0:
             print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
-    # Оценка
     model.eval()
     with torch.no_grad():
         test_outputs = model(X_test)
@@ -308,19 +294,16 @@ def handle_neural(X, y, instance):
 
     instance.ACCURACY = accuracy
 
-    # Визуализация потерь
     plt.figure(figsize=(10, 6))
-    plt.plot(range(num_epochs), loss_list)  # Используйте loss_list напрямую
+    plt.plot(range(num_epochs), loss_list)
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.title('Training Loss Over Epochs')
 
-    # Сохранение графика
     graph_filename = f'neural_network_{instance.id}.png'
     graph_path = os.path.join(settings.MEDIA_ROOT, 'graphs', graph_filename)
     plt.savefig(graph_path)
 
-    # Обновление экземпляра модели
     instance.graph_file.name = graph_path
 ####################################
 @login_required
@@ -366,7 +349,7 @@ def index(request):
                 return redirect('index')
             instance.save()
 
-            return redirect('success')
+            return redirect('result')
     else:
         form = UploadCsvForm()
     return render(request, 'index.html', {'form': form})
@@ -406,7 +389,7 @@ def user_login(request):
 
 
 def resulations_models(request):
-    # Получение последней модели пользователя
+    # получение последней модели пользователя
     last_model = UploadedData.objects.filter(user=request.user).order_by('-upload_date').first()
 
     if last_model:
@@ -421,7 +404,6 @@ def resulations_models(request):
             'RECALL': last_model.RECALL,
             'PRECISION': last_model.PRECISION,
             'F1': last_model.F1,
-            # Добавьте другие метрики по необходимости
         }
     else:
         context = {'error': 'Результаты не найдены.'}
@@ -450,35 +432,25 @@ def get_model_metrics(instance):
     elif instance.model_type == 'gradient_boosting':
         metrics = f"MSE: {instance.MSE}\nMAE: {instance.MAE}\nR-Squared: {instance.RSQUARE}\n"
     elif instance.model_type == 'neural_network':
-        # Добавьте здесь метрики для нейронной сети, если они у вас есть
         metrics = f"Accuracy: {instance.ACCURACY}\n"
 
     return metrics
 def download_current_results(request):
-    # Получение данных последней модели пользователя
     last_model = UploadedData.objects.filter(user=request.user).order_by('-upload_date').first()
 
     if not last_model:
         return HttpResponse('Результаты не найдены.', status=404)
 
-    # Формирование строки с метриками
     metrics = get_model_metrics(last_model)
-    # Добавьте другие метрики, если они есть
 
-    # Создание архива
     archive_name = 'model_results.zip'
     archive_path = os.path.join(settings.MEDIA_ROOT, archive_name)
 
     with zipfile.ZipFile(archive_path, 'w') as archive:
-        # Добавление файла графика
         if last_model.graph_file:
             graph_path = last_model.graph_file.path
             archive.write(graph_path, os.path.basename(graph_path))
-
-        # Добавление текстовых метрик
         archive.writestr('model_metrics.txt', metrics)
-
-    # Отправка архива пользователю
     with open(archive_path, 'rb') as f:
         response = HttpResponse(f.read(), content_type='application/zip')
         response['Content-Disposition'] = f'attachment; filename={archive_name}'

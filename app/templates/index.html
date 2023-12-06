@@ -4,9 +4,16 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <title>Планирование технического обслуживаниы</title>
+    <title>VMLC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
     <header>
@@ -17,21 +24,96 @@
             </a>
         </div>
     </header>
-    <div class="left-nav" id="left-nav">
-        <div class="column_items">
-            <a href="/success_result">SUCCESS</a>
-        </div>
+    <div class="left-nav " id="left-nav">
         <div class="column_items">
             <a href="/result">Результаты</a>
         </div>
+        <div class="column_items">
+            <a href="#">История</a>
+        </div>
+        <div class="column_items">
+            <a href="/success_result">Успех</a>
+        </div>
+    </div>  
+    <div class="progress-indicators">
+        <div id="step1" class="indicator hidden-state">1</div>
+        <div id="step2" class="indicator grey-state">1</div>
+        <span>Загрузка данных</span>
+        <span> > </span>
+        <div id="step3" class="indicator grey-state">2</div>
+        <span>Выбор модели</span>
+        <span> > </span>
+        <div id="step3" class="indicator grey-state">3</div>
+        <span>Целевая переменная</span>
     </div>
+    
+    
     <div class="form_shield">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Загрузить</button>
-        </form>
-    </div>
+    <form class="upload_model_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+    
+        <p>
+            <label for="{{ form.csv_file.id_for_label }}">{{ form.csv_file.label }}</label>
+            <div class="field_description">
+                <span>Загрузите данные в формате ".csv". Предварительная очистка и предобработка данных не требуется, она осуществляется
+                    в автоматическом режиме.
+                </span>
+            </div>
+            {{ form.csv_file }}
+        </p>
+    
+        <p>
+            <label for="{{ form.model_choice.id_for_label }}">{{ form.model_choice.label }}</label>
+            <div class="field_description">
+                <span>Выберите любую из предложенных моделей в списке. Каждая модель выполняет разные задачи. Поэтому
+                    при выборе определенной модели следует учитывать ожидаемую задачу от модели.
+                </span>
+            </div>
+            {{ form.model_choice }}
+        </p>
+    
+        <p>
+            <label for="{{ form.target_variable.id_for_label }}">{{ form.target_variable.label }}</label>
+            <div class="field_description">
+                <span>Укажите целевую переменную названием ее столбца</span>
+            </div>
+            {{ form.target_variable }}
+        </p>
+    
+        <button class="sumit_form_models" type="submit">получить результаты</button>
+    </form>
+</div>
+
+    
 <script src="{% static 'js/leftnav-close.js' %}"></script>
+<script async>
+    $(document).ready(function() {
+    $('#file-upload').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        if (fileName) {
+            $('.file_chooser label').text(fileName);
+        } else {
+            $('.file_chooser label').text("Выберите файл");
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+    const formFields = document.querySelectorAll('.upload_model_form input, .upload_model_form select');
+    const indicators = document.querySelectorAll('.progress-indicators .indicator');
+    
+    formFields.forEach((field, index) => {
+        field.addEventListener('input', () => {
+            console.log(field)
+            if(field.value.trim() !== '') {
+                indicators[index].classList.add('green-state');
+            } else {
+                indicators[index].classList.remove('green-state');
+            }
+        });
+    });
+});
+
+
+</script>
 </body>
 </html>

@@ -17,6 +17,9 @@ font-family: 'Russo One', sans-serif;
     --plette2-gray: #393E46;
     --plette2-yello: #FFD369;
     --plette2-white: #EEEEEE;
+    --plette2-blue: #2d2de7;
+
+    --orange-beau: #DA9556;
 }
 
 html,
@@ -25,7 +28,27 @@ body {
     overflow: hidden;
     background-color: var(--plette2-white);
 }
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #636363 #ffffff;
+  }
 
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #636363;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
 header {
     background-color: var(--plette2-black);
     height: 80px;
@@ -116,6 +139,7 @@ header {
     display: block;
     background-color: var(--plette2-gray);
     transition: width 0.3s; 
+    padding: 100px 0px 0px 0px;
 }
 
 .left-nav.hidden {
@@ -126,16 +150,33 @@ header {
 
 .form_shield {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 15%;
+    left: 20%;
     display: flex;
     flex-direction: column;
 }
 .column_items {
     display: flex;
-    padding: 100px 10px 10px 10px;
+    padding: 20px 10px 10px 10px;
+    color: var(--plette2-white);
+    transition: width 0.3s; 
+    padding: 10px 10px 10px 20px;
 }
-
+.column_items a{
+    color: var(--plette2-white);
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif; 
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 0.5px solid white;
+    padding: 5px 30px 5px 10px;
+    transition: color 0.5s border 0.5s; 
+}
+.column_items a:hover{
+    border: 0.5px solid var(--plette2-yello);
+    color: var(--plette2-yello);
+}
 .results_holder {
     display: flex;
     align-items: center;
@@ -159,4 +200,200 @@ header {
     font-size: 22px;
     -webkit-background-clip: text;
     background-clip: text;
+}
+.form_shield {
+    width: 70%; 
+    /* margin: 20px auto; центрируем форму */
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload_model_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.upload_model_form p{
+    font-size: 26px;
+    font-family: 'Russo One', sans-serif;
+}
+
+
+.upload_model_form input,
+.upload_model_form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
+    padding: 10px 20px 10px 20px;
+}
+
+.file_chooser input[type='file'] {
+    visibility: hidden; 
+    position: absolute; 
+}
+
+.file_chooser label {
+    display: block; 
+    text-align: center; 
+    background-color: #007bff; 
+    color: white;
+    padding: 10px; 
+    border-radius: 4px; 
+    cursor: pointer;
+    margin: 10px auto; 
+    width: 50%;
+    transition: background-color 0.3s; 
+}
+
+.file_chooser label:hover {
+    background-color: #0056b3; 
+}
+
+button.sumit_form_models {
+    background-color: var(--plette2-yello); 
+    color: black; 
+    border: none; 
+    padding: 10px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: 0.5s; 
+    font-family: 'Roboto', sans-serif; 
+    font-size: 16px;
+    font-weight: 500;
+}
+
+button.sumit_form_models:hover {
+    background-color: var(--plette2-black); 
+    color: var(--plette2-yello);
+}
+
+.field_description span {
+    display: block;
+    margin-top: -15px;
+    font-size: 1.2em;
+    font-weight: 300;
+    color: #666; 
+    font-family: 'Roboto', sans-serif; 
+}
+input[type="file" i] {
+    text-align: center;
+}
+
+.grey-state {
+    background-color: var(--plette2-gray);
+}
+
+.green-state {
+    background-color: var(--plette2-blue);
+}
+.progress-indicators {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    width: 70%;
+    font-family: 'Roboto', sans-serif; 
+    color: #222222;
+}
+.indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; 
+    cursor: progress;
+    color: white;
+    margin: 0 5px; 
+    font-family: 'Roboto', sans-serif; 
+}
+.green-state {
+    background-color: var(--plette2-blue);
+}
+.hidden-state {
+    display: none;
+}
+.indicator {
+    transition: background-color 0.3s;
+}
+.skelet_results {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 20px;
+}
+.back_button_top {
+    font-family: 'Roboto', sans-serif; 
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid var(--plette2-gray);
+    color: var(--plette2-black);
+    background: transparent;
+    transition: 0.5s;
+    width: 70px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.back_button_top:hover {
+    border: 1px solid var(--plette2-gray);
+    color: var(--plette2-black);
+    background: var(--plette2-black);
+    color: var(--plette2-yello)
+}
+.skelet_results h1{
+    font-family: 'Russo One', sans-serif;
+    font-weight: 400;
+}
+.skelet_results h2{
+    font-family: 'Russo One', sans-serif;
+    font-weight: 200;
+    color: var(--plette2-gray);
+}
+.skelet_results h3{
+    font-family: 'Russo One', sans-serif;
+    font-weight: 100;
+    color: var(--plette2-gray);
+}
+.skelet_results ul{
+    font-family: 'Roboto', sans-serif; 
+    font-weight: 300;
+    color: var(--plette2-gray);
+}
+.back_button_bot {
+    font-family: 'Roboto', sans-serif; 
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid var(--plette2-gray);
+    color: var(--plette2-black);
+    background: transparent;
+    transition: 0.5s;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.back_button_bot:hover {
+    border: 1px solid var(--plette2-gray);
+    color: var(--plette2-black);
+    background: var(--plette2-black);
+    color: var(--plette2-yello)
 }

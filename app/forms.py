@@ -14,9 +14,9 @@ class UploadCsvForm(forms.Form):
         ('neural_network', 'Нейронные Сети'),
     ]
 
-    csv_file = forms.FileField(label='Загрузите данные .csv')
-    model_choice = forms.ChoiceField(choices=MODEL_CHOICES, label='Выберите модель')
-    target_variable = forms.CharField(max_length=100, label='Целевая переменная(y)')
+    csv_file = forms.FileField(label='Загрузка данных')
+    model_choice = forms.ChoiceField(choices=MODEL_CHOICES, label='Модель')
+    target_variable = forms.CharField(max_length=100, label='Целевая переменная')
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()

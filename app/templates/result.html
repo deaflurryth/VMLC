@@ -10,44 +10,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
-    <a href="/">НАЗАД</a>
-    <h1>Результаты работы модели: {{ model_type }}</h1>
-    <h2>Целевая переменная: {{ target_variable }}</h2>
+    <div class="skelet_results">
+        <a href="/" class="back_button_top">НАЗАД</a>
+        <h1>Результаты работы модели "{{ model_type }}"</h1>
+        <h2>Целевая переменная: {{ target_variable }}</h2>
 
-    <div>
-        <img src="{{ graph_url }}" alt="Graph of Model">
+        <div>
+            <img src="{{ graph_url }}" alt="Graph of Model">
+        </div>
+
+        <h3>Метрики:</h3>
+        <ul>
+            {% if model_type == 'linear_regression' or model_type == 'gradient_boosting' %}
+                <li>MSE: {{ MSE }}</li>
+                <li>MAE: {{ MAE }}</li>
+                <li>R-Squared: {{ RSQUARE }}</li>
+            {% endif %}
+
+            {% if model_type == 'decision_tree' or model_type == 'logistic_regression' or model_type == 'svm' or model_type == 'knn' %}
+                <li>Accuracy: {{ ACCURACY }}</li>
+                <li>Recall: {{ RECALL }}</li>
+                <li>Precision: {{ PRECISION }}</li>
+                <li>F1 Score: {{ F1 }}</li>
+            {% endif %}
+
+            {% if model_type == 'kmeans' %}
+                <li>Silhouette Score: {{ SILHUETTE }}</li>
+                <li>Davies-Bouldin Score: {{ DAVIES }}</li>
+            {% endif %}
+
+            {% if model_type == 'neural_network' %}
+                <li>Accuracy: {{ ACCURACY }}</li>
+            {% endif %}
+        </ul>
+        <a href="{% url 'download_current_results' %}" class="back_button_bot">Скачать текущие результаты</a>
     </div>
-
-    <h3>Метрики:</h3>
-    <ul>
-        {% if model_type == 'linear_regression' or model_type == 'gradient_boosting' %}
-            <li>MSE: {{ MSE }}</li>
-            <li>MAE: {{ MAE }}</li>
-            <li>R-Squared: {{ RSQUARE }}</li>
-        {% endif %}
-
-        {% if model_type == 'decision_tree' or model_type == 'logistic_regression' or model_type == 'svm' or model_type == 'knn' %}
-            <li>Accuracy: {{ ACCURACY }}</li>
-            <li>Recall: {{ RECALL }}</li>
-            <li>Precision: {{ PRECISION }}</li>
-            <li>F1 Score: {{ F1 }}</li>
-        {% endif %}
-
-        {% if model_type == 'kmeans' %}
-            <li>Silhouette Score: {{ SILHUETTE }}</li>
-            <li>Davies-Bouldin Score: {{ DAVIES }}</li>
-        {% endif %}
-
-        {% if model_type == 'neural_network' %}
-            <li>Accuracy: {{ ACCURACY }}</li>
-        {% endif %}
-    </ul>
-    <a href="{% url 'download_current_results' %}">Скачать текущие результаты</a>
-
 </body>
 <script async>
-
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = 'auto';
+    });
 </script>
+
 </html>
